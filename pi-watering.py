@@ -59,8 +59,9 @@ def infolog():
 try:
     today = time.strftime('%Y:%j', time.localtime())
     schedule.every().day.at(EARLIEST_RUN).do(FILL_TANK)
-    wait = DAYTIME_WAIT
-    while True: 
+    infolog()
+    while True:
+        wait = DAYTIME_WAIT
         if not earliest_run_today:
             earliest_run_today = time.strptime(today + " " + EARLIEST_RUN, '%Y:%j %H:%M')
             logging.debug("Reset earliest job schedule to %s", time.asctime(earliest_run_today))
