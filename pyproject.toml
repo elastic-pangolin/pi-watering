@@ -6,7 +6,7 @@ authors = [
     {name = "elastic-pangolin", email="invalid@example.com"},
 ]
 dependencies = [
-    "RPi",
+    "RPi.GPOI>=0.7.1",
     "schedule>=1.2.0"
 ]
 requires-python = ">=3.7"
