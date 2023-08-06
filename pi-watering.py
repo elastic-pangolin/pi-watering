@@ -1,7 +1,7 @@
 import schedule
 import logging
 import time
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 # EDIT Configuration here
 PUMP_RELAY_PINS = { 37 }
