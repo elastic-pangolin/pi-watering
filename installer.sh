@@ -1,5 +1,5 @@
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install .
-pip freeze # show installed packages
+pip3 install .
+pip3 freeze # show installed packages
 deactivate
