@@ -4,7 +4,7 @@ import time
 import RPi.GPIO as GPIO
 
 # EDIT Configuration here
-PUMP_RELAY_PINS = [1, 2, 3, 4]
+PUMP_RELAY_PINS = [1, 2, 3, 4, 16, 17, 18, 19]
 
 ### No editing below here except when things break
 
@@ -21,7 +21,7 @@ def test_all_pumps():
     for pin in PUMP_RELAY_PINS:
          GPIO.output(pin,True)
          logging.debug("Turn on pump pin %s", pin)
-         time.sleep(1)
+         time.sleep(20)
          GPIO.output(pin,False)
          logging.debug("Turn off pump pin %s", pin)
 
