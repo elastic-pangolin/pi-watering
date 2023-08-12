@@ -62,7 +62,8 @@ def infolog():
     logging.info(schedule.get_jobs())
 
 try:
-    logging.info("Script starting on %s (%s)", time.strftime('%H:%M:%s %Y, %j', time.localtime()), time.localtime())
+    logging.info("Script starting on %s (%s)", time.strftime('%H:%M:%S %Y, day %j', time.localtime()),
+      time.strftime('%s', time.localtime()) )
     today = time.strftime('%Y:%j', time.localtime())
     schedule.every().day.at(EARLIEST_RUN).do(FILL_TANK)
     infolog()
@@ -70,12 +71,12 @@ try:
         wait = DAYTIME_WAIT
         if not earliest_run_today:
             earliest_run_today = time.strptime(today + " " + EARLIEST_RUN, '%Y:%j %H:%M')
-            logging.debug("Reset earliest job schedule to %s (%s)", time.asctime(earliest_run_today), earliest_run_today)
+            logging.debug("Reset earliest job schedule to %s", time.asctime(earliest_run_today))
         if not latest_run_today:
             latest_run_today = time.strptime(today + " " + LATEST_RUN, '%Y:%j %H:%M')
-            logging.debug("Reset latest job schedule to %s (%s)", time.asctime(latest_run_today), latest_run_today)
+            logging.debug("Reset latest job schedule to %s", time.asctime(latest_run_today))
             
-        logging.debug("NOW: %s", time.localtime())
+        logging.debug("NOW: %s", time.asctime(time.localtime()) )
         if (time.localtime() < earliest_run_today or time.localtime() > latest_run_today):
             # nighttime -- do not run
             logging.debug("Script is in nightmode")
