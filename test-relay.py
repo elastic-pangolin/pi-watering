@@ -11,6 +11,8 @@ PUMP_RELAY_PINS = { 37 }
 SYSTEM_START = time.time()
 logging.basicConfig(level=logging.DEBUG)
 
+GPIO.setmode(GPIO.BOARD)
+
 def start_all_pumps():
     for pin in PUMP_RELAY_PINS:
          GPIO.output(pin,True)
