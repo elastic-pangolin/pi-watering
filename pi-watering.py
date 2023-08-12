@@ -16,7 +16,10 @@ NIGHTTIME_WAIT = 1800
 
 SYSTEM_START = time.time()
 last_pump_start = None
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    level=logging.DEBUG,
+    datefmt='%H:%M:%S')
 
 DEVICE_BUS = 1
 DEVICE_ADDR = 0x10
@@ -62,6 +65,9 @@ def infolog():
     logging.info(schedule.get_jobs())
 
 try:
+    # reset all relays
+    stop_all_pumps()
+    
     logging.info("Script starting on %s (%s)", time.strftime('%H:%M:%S %Y, day %j', time.localtime()),
       time.strftime('%s', time.localtime()) )
     today = time.strftime('%Y:%j', time.localtime())
@@ -84,7 +90,6 @@ try:
             # schedule refills etc here
             logging.info("No new jobs have been scheduled")
           
-        logging.debug("NOW: %s, %s", time.asctime(time.localtime()), (time.localtime() < earliest_run_today) )
         if (time.localtime() < earliest_run_today or time.localtime() > latest_run_today):
             # nighttime -- do not run
             logging.debug("Script is in nightmode")
@@ -98,6 +103,7 @@ try:
         time.sleep(wait)
         
 except Exception as e:
+    stop_all_pumps()
     logging.error(e)
 
 schedule.clear()
