@@ -4,7 +4,7 @@ import time
 import RPi.GPIO as GPIO
 
 # EDIT Configuration here
-PUMP_RELAY_PINS = { 37 }
+PUMP_RELAY_PINS = range(0, 255)
 
 ### No editing below here except when things break
 
@@ -17,23 +17,21 @@ def init_gpio():
     for pin in PUMP_RELAY_PINS:
         GPIO.setup(pin, GPIO.OUT)
 
-def start_all_pumps():
+def test_all_pumps():
     for pin in PUMP_RELAY_PINS:
          GPIO.output(pin,True)
          logging.debug("Turn on pump pin %s", pin)
-
-def stop_all_pumps():
-    for pin in PUMP_RELAY_PINS:
+         time.sleep(1)
          GPIO.output(pin,False)
          logging.debug("Turn off pump pin %s", pin)
+
+
 
 init_gpio()
 
 logging.info("Test starting")
 
-start_all_pumps()
-time.sleep(1)
-stop_all_pumps()
+test_all_pumps()
 
 GPIO.cleanup()
 
