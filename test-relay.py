@@ -1,38 +1,32 @@
 import schedule
 import logging
 import time
-import RPi.GPIO as GPIO
+import smbus
+import sys
 
 # EDIT Configuration here
-PUMP_RELAY_PINS = [1, 2, 3, 4, 16, 17, 18, 19]
+PUMP_DEVICE_IDS = range(1, 5)
 
 ### No editing below here except when things break
 
 SYSTEM_START = time.time()
 logging.basicConfig(level=logging.DEBUG)
 
-def init_gpio():
-    GPIO.setwarnings(True)
-    GPIO.setmode(GPIO.BCM)
-    for pin in PUMP_RELAY_PINS:
-        GPIO.setup(pin, GPIO.OUT)
+DEVICE_BUS = 1
+DEVICE_ADDR = 0x10
+bus = smbus.SMBus(DEVICE_BUS)
 
 def test_all_pumps():
-    for pin in PUMP_RELAY_PINS:
-         GPIO.output(pin,True)
-         logging.debug("Turn on pump pin %s", pin)
-         time.sleep(20)
-         GPIO.output(pin,False)
-         logging.debug("Turn off pump pin %s", pin)
+    for p in PUMP_DEVICE_IDS:
+         bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
+         logging.debug("Turn on pump ID %s", p)
+         time.sleep(3)
+         bus.write_byte_data(DEVICE_ADDR, p, 0x00)
+         logging.debug("Turn off pump ID %s", p)
 
-
-
-init_gpio()
 
 logging.info("Test starting")
 
 test_all_pumps()
-
-GPIO.cleanup()
 
 logging.info("Test completed")
