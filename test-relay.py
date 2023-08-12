@@ -4,7 +4,7 @@ import time
 import RPi.GPIO as GPIO
 
 # EDIT Configuration here
-PUMP_RELAY_PINS = range(0, 255)
+PUMP_RELAY_PINS = range(1, 2, 3, 4)
 
 ### No editing below here except when things break
 
