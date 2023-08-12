@@ -1,10 +1,11 @@
 import schedule
 import logging
 import time
-import RPi.GPIO as GPIO
+import smbus
+import sys
 
 # EDIT Configuration here
-PUMP_RELAY_PINS = { 37 }
+PUMP_DEVICE_IDS = (1, 2)
 MAX_PUMP_OPERATION = 540
 EARLIEST_RUN = "08:00"
 LATEST_RUN = "20:00"
@@ -17,19 +18,23 @@ SYSTEM_START = time.time()
 last_pump_start = None
 logging.basicConfig(level=logging.DEBUG)
 
+DEVICE_BUS = 1
+DEVICE_ADDR = 0x10
+bus = smbus.SMBus(DEVICE_BUS)
+
 earliest_run_today = None
 latest_run_today = None
 
 def start_all_pumps():
     last_pump_start = time.time()
-    for pin in PUMP_RELAY_PINS:
-         #GPIO.output(pin,True)
-         logging.debug("Turn on pump pin %s", pin)
+    for p in PUMP_DEVICE_IDS:
+        bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
+        logging.debug("Turn on pump pin %s", p)
 
 def stop_all_pumps():
-    for pin in PUMP_RELAY_PINS:
-         #GPIO.output(pin,False)
-         logging.debug("Turn off pump pin %s", pin)
+    for p in PUMP_DEVICE_IDS:
+        bus.write_byte_data(DEVICE_ADDR, p, 0x00)
+        logging.debug("Turn off pump pin %s", p)
 
 def FILL_TANK():
     logging.debug("Starting FILL_TANK job")
