@@ -27,6 +27,8 @@ def stop_all_pumps():
          GPIO.output(pin,False)
          logging.debug("Turn off pump pin %s", pin)
 
+init_gpio()
+
 logging.info("Test starting")
 
 start_all_pumps()
