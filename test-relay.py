@@ -18,10 +18,10 @@ bus = smbus.SMBus(DEVICE_BUS)
 
 def test_all_pumps():
     for p in PUMP_DEVICE_IDS:
-         bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
+         bus.write_byte_data(DEVICE_ADDR, p, 0x00)
          logging.debug("Turn on pump ID %s", p)
          time.sleep(3)
-         bus.write_byte_data(DEVICE_ADDR, p, 0x00)
+         bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
          logging.debug("Turn off pump ID %s", p)
 
 
