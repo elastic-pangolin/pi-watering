@@ -80,6 +80,7 @@ try:
             
         if (time.localtime() < earliest_run_today or time.localtime() > latest_run_today):
             # nighttime -- do not run
+            logging.debug("Script is in nightmode")
             wait = NIGHTTIME_WAIT
             today = time.strftime('%Y:%j', time.localtime())
             earliest_run_today = None
