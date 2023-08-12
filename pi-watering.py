@@ -28,12 +28,12 @@ latest_run_today = None
 def start_all_pumps():
     last_pump_start = time.time()
     for p in PUMP_DEVICE_IDS:
-        bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
+        bus.write_byte_data(DEVICE_ADDR, p, 0x00)
         logging.debug("Turn on pump pin %s", p)
 
 def stop_all_pumps():
     for p in PUMP_DEVICE_IDS:
-        bus.write_byte_data(DEVICE_ADDR, p, 0x00)
+        bus.write_byte_data(DEVICE_ADDR, p, 0xFF)
         logging.debug("Turn off pump pin %s", p)
 
 def FILL_TANK():
