@@ -1,6 +1,7 @@
 import schedule
 import logging
 import time
+import math
 import smbus
 import sys
 
@@ -40,19 +41,23 @@ def stop_all_pumps():
         logging.debug("Turn off pump pin %s", p)
 
 def FILL_TANK():
-    logging.debug("Starting FILL_TANK job")
+    logging.info("Starting FILL_TANK job")
     if last_pump_start and last_pump_start >= time.time() - MAX_PUMP_OPERATION * 2:
         # last pump start too recent, sleep
-        time.sleep(last_pump_start + MAX_PUMP_OPERATION * 2 - time.time())
-    max_cycles = 100
+        pump_backoff_wait = last_pump_start + MAX_PUMP_OPERATION * 2 - time.time()
+        logging.debug("Pump start delayed due to minimum backoff, waiting for %s seconds", pump_backoff_wait)
+        time.sleep(pump_backoff_wait)
+    pump_checkin_wait = 5
+    max_cycles = math.ceil(MAX_PUMP_OPERATION / pump_checkin_wait)
     start_time = time.time()
     start_all_pumps()
     for i in range(max_cycles):
-        time.sleep(5)
+        time.sleep(pump_checkin_wait)
         seconds_passed = time.time() - start_time
         if seconds_passed >= MAX_PUMP_OPERATION:
              break
     stop_all_pumps()
+    logging.info("Completed FILL_TANK job")
 
 def REFILL_TANK():
     # run fill tank once
@@ -61,7 +66,7 @@ def REFILL_TANK():
 
 def infolog():
     seconds_since = time.time() - SYSTEM_START
-    logging.info("Operating for %s seconds", seconds_since)
+    logging.info("Operating for %s seconds", math.floor(seconds_since))
     logging.info(schedule.get_jobs())
 
 try:
