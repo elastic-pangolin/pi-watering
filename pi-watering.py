@@ -88,12 +88,6 @@ try:
         if not latest_run_today:
             latest_run_today = time.strptime(today + " " + LATEST_RUN, '%Y:%j %H:%M')
             logging.debug("Reset latest job schedule to %s", time.asctime(latest_run_today))
-
-        last_hour = hour
-        hour = time.strftime('%H', time.localtime())
-        if (hour != last_hour):
-            # schedule refills etc here
-            logging.info("No new jobs have been scheduled")
           
         if (time.localtime() < earliest_run_today or time.localtime() > latest_run_today):
             # nighttime -- do not run
@@ -103,8 +97,15 @@ try:
             earliest_run_today = None
             latest_run_today =  None
         else:
+            last_hour = hour
+            hour = time.strftime('%H', time.localtime())
+            if (hour != last_hour):
+                # schedule refills etc here
+                logging.info("No new jobs have been scheduled")
+
             infolog()
             schedule.run_pending()
+
         time.sleep(wait)
         
 except Exception as e:
