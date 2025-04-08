@@ -6,7 +6,11 @@ authors = [
     {name = "elastic-pangolin", email="invalid@example.com"},
 ]
 dependencies = [
-    "smbus",
     "schedule>=1.2.0"
 ]
 requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dependencies = [
+    "smbus"
+]
